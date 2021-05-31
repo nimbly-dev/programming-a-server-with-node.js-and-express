@@ -1,10 +1,10 @@
-const { request } = require("express");
+const { request, response } = require("express");
 const express = require("express");
 const app = express();
 
 app.use(express.json());
 
-let phoneBook = [
+let phoneBooks = [
   {
     name: "Arto Hellas",
     number: "040-123456",
@@ -28,12 +28,25 @@ let phoneBook = [
 ];
 
 app.get("/api/persons", (request, response) => {
-  response.json(phoneBook);
+  response.json(phoneBooks);
+});
+
+app.get("/api/persons/:id", (request, response) => {
+  //Where ':id' is the params value
+  const id = Number(request.params.id);
+  const phoneBookID = phoneBooks.find((phoneBook) => id === phoneBook.id);
+  console.log(phoneBookID);
+  if (phoneBookID !== null) {
+    console.log("On True Block");
+    response.json(phoneBookID);
+  } else {
+    response.status(404).end();
+  }
 });
 
 app.get("/api/info", (request, response) => {
   let currentTime = new Date();
-  response.send(`Phonebook has info for ${phoneBook.length}\n${currentTime}`);
+  response.send(`Phonebook has info for ${phoneBooks.length}\n${currentTime}`);
 });
 
 const PORT = 3001;
