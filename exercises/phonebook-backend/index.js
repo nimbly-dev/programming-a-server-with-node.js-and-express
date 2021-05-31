@@ -52,6 +52,7 @@ app.get("/api/info", (request, response) => {
 app.post("/api/persons", (request, response) => {
   const body = request.body;
 
+  //Generate ID based on length of phonebooks array
   const generateId = () => {
     const maxId =
       phoneBooks.length > 0 ? Math.max(...phoneBooks.map((n) => n.id)) : 0;
@@ -59,9 +60,13 @@ app.post("/api/persons", (request, response) => {
   };
 
   //If content is missing
-  if (!body.name) {
+  if (!body.name || !body.number) {
     return response.status(400).json({
-      error: "Name is missing",
+      error: "Name or number is missing",
+    });
+  } else if (phoneBooks.find((n) => n.name === body.name)) {
+    return response.status(400).json({
+      error: "Name must be unique",
     });
   }
   const phoneBook = {
