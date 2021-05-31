@@ -49,6 +49,14 @@ app.get("/api/info", (request, response) => {
   response.send(`Phonebook has info for ${phoneBooks.length}\n${currentTime}`);
 });
 
+app.delete("/api/persons/:id", (request, response) => {
+  //Where ':id' is the params value
+  const id = Number(request.params.id);
+  //Check if Id exist
+  phoneBooks = phoneBooks.filter((phoneBook) => phoneBook.id !== id);
+  response.status(204).end();
+});
+
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
