@@ -49,6 +49,31 @@ app.get("/api/info", (request, response) => {
   response.send(`Phonebook has info for ${phoneBooks.length}\n${currentTime}`);
 });
 
+app.post("/api/persons", (request, response) => {
+  const body = request.body;
+
+  const generateId = () => {
+    const maxId =
+      phoneBooks.length > 0 ? Math.max(...phoneBooks.map((n) => n.id)) : 0;
+    return maxId + 1;
+  };
+
+  //If content is missing
+  if (!body.name) {
+    return response.status(400).json({
+      error: "Name is missing",
+    });
+  }
+  const phoneBook = {
+    name: body.name,
+    number: body.number,
+    id: generateId(),
+  };
+
+  phoneBooks = phoneBooks.concat(phoneBook);
+  response.json(phoneBook);
+});
+
 app.delete("/api/persons/:id", (request, response) => {
   //Where ':id' is the params value
   const id = Number(request.params.id);
