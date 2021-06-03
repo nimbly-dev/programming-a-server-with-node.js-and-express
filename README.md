@@ -11,4 +11,5 @@ Fullstack part3
 3.6 phonebook-backend step6 - DONE
 
 3.7 phonebook-backend step7 - DONE
+3.8\* phonebook-backend step8 - DONE
 """

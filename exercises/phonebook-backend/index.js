@@ -4,12 +4,15 @@ const express = require("express");
 const app = express();
 
 app.use(express.json());
-// Added morgan logging
-app.use(morgan("tiny"));
 
-morgan.token("param", function (req, res, param) {
-  return req.params[param];
+morgan.token("data", function (req, res) {
+  if ("POST" === req.method) {
+    return JSON.stringify(req.body);
+  }
 });
+
+// Added morgan logging
+app.use(morgan(":method :url :status :response-time - ms :data"));
 
 let phoneBooks = [
   {
@@ -42,9 +45,7 @@ app.get("/api/persons/:id", (request, response) => {
   //Where ':id' is the params value
   const id = Number(request.params.id);
   const phoneBookID = phoneBooks.find((phoneBook) => id === phoneBook.id);
-  console.log(phoneBookID);
   if (phoneBookID !== null) {
-    console.log("On True Block");
     response.json(phoneBookID);
   } else {
     response.status(404).end();
