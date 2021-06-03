@@ -1,8 +1,15 @@
 const { request, response } = require("express");
+const morgan = require("morgan");
 const express = require("express");
 const app = express();
 
 app.use(express.json());
+// Added morgan logging
+app.use(morgan("tiny"));
+
+morgan.token("param", function (req, res, param) {
+  return req.params[param];
+});
 
 let phoneBooks = [
   {
@@ -49,6 +56,7 @@ app.get("/api/info", (request, response) => {
   response.send(`Phonebook has info for ${phoneBooks.length}\n${currentTime}`);
 });
 
+//Create new Person
 app.post("/api/persons", (request, response) => {
   const body = request.body;
 
